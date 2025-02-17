@@ -3,7 +3,7 @@ import axios from 'axios';
 // ✅ Dynamically set API Base URL
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://tasklist-backend.railway.internal"  // ✅ Use Railway API in production
+    ? process.env.API_URL // ✅ Use Railway API in production
     : "http://localhost:3001";                      // ✅ Use local API during development
 
 // Fetch all todos (with optional filter)

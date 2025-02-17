@@ -1,10 +1,8 @@
 import axios from 'axios';
 
 // ✅ Dynamically set API Base URL
-const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.API_URL // ✅ Use Railway API in production
-    : "http://localhost:3001";                      // ✅ Use local API during development
+const API_BASE_URL = process.env.API_URL;
+
 
 // Fetch all todos (with optional filter)
 export const fetchTodos = async (filter) => {

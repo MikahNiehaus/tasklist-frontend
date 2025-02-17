@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 // ✅ Dynamically set API Base URL
-const API_BASE_URL = process.env.API_URL;
-
+const API_BASE_URL = "https://tasklist-backend-production.up.railway.app";                      // ✅ Use local API during development
 
 // Fetch all todos (with optional filter)
 export const fetchTodos = async (filter) => {

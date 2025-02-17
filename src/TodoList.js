@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   fetchTodos,
   createTodo,
-  updateTodo,
   completeTodo,
   deleteTodo,
 } from './api';
@@ -12,14 +11,16 @@ const TodoList = () => {
   const [newTodo, setNewTodo] = useState({ title: '', description: '' });
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
-    loadTodos();
-  }, [filter]);
-
-  const loadTodos = async () => {
+  // ✅ Fix: Define loadTodos BEFORE useEffect & use useCallback
+  const loadTodos = useCallback(async () => {
     const data = await fetchTodos(filter);
     setTodos(data);
-  };
+  }, [filter]); // ✅ Now filter is a dependency
+
+  // ✅ Fix: Use loadTodos in useEffect (with useCallback)
+  useEffect(() => {
+    loadTodos();
+  }, [loadTodos]);
 
   const handleCreateTodo = async (e) => {
     e.preventDefault();

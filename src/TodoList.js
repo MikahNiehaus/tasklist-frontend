@@ -1,57 +1,32 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { fetchTodos } from "./api";
+import React from "react";
+import useTodos from "./hooks/useTodos";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
-import "./styles.css"; // Import CSS styles
+import TodoFilter from "./components/TodoFilter";
+import "./styles/styles.css";
 
 const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState({ title: "", description: "", completed: false });
-  const [editingTodo, setEditingTodo] = useState(null);
-  const [filter, setFilter] = useState("all");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  // ✅ Load Todos with useCallback & Error Handling
-  const loadTodos = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    console.log(`Fetching todos with filter: ${filter}`);
-    try {
-      const data = await fetchTodos(filter);
-      setTodos(data);
-      console.log("Todos fetched successfully:", data);
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-      setError("Failed to fetch todos. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }, [filter]);
-
-  useEffect(() => {
-    loadTodos();
-  }, [loadTodos]);
+  const {
+    todos,
+    newTodo,
+    editingTodo,
+    filter,
+    setNewTodo,
+    setEditingTodo,
+    setFilter,
+    handleCreateTodo,
+    handleUpdateTodo,
+    handleCompleteTodo,
+    handleToggleStatus,
+    handleDeleteTodo,
+  } = useTodos();
 
   return (
     <div className="container">
       <h1 className="title">To-Do List</h1>
 
       {/* Filter Buttons */}
-      <div className="filters">
-        {["all", "pending", "completed"].map((type) => (
-          <button
-            key={type}
-            className={`filter-button ${filter === type ? "active" : ""}`}
-            onClick={() => setFilter(type)}
-          >
-            {type.charAt(0).toUpperCase() + type.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      {/* Error Message */}
-      {error && <p className="error">{error}</p>}
+      <TodoFilter filter={filter} setFilter={setFilter} />
 
       {/* Create & Edit Todo Form */}
       <TodoForm
@@ -59,11 +34,9 @@ const TodoList = () => {
         setNewTodo={setNewTodo}
         editingTodo={editingTodo}
         setEditingTodo={setEditingTodo}
-        loadTodos={loadTodos}
+        handleCreateTodo={handleCreateTodo}
+        handleUpdateTodo={handleUpdateTodo}
       />
-
-      {/* Loading Indicator */}
-      {loading && <p className="loading">Loading...</p>}
 
       {/* Todo List */}
       <ul className="todo-list">
@@ -72,7 +45,9 @@ const TodoList = () => {
             key={todo.id}
             todo={todo}
             setEditingTodo={setEditingTodo}
-            loadTodos={loadTodos}
+            handleCompleteTodo={handleCompleteTodo}
+            handleToggleStatus={handleToggleStatus}
+            handleDeleteTodo={handleDeleteTodo}
           />
         ))}
       </ul>

@@ -1,27 +1,8 @@
 import React from "react";
-import { createTodo, updateTodo } from "../api";
 
-const TodoForm = ({ newTodo, setNewTodo, editingTodo, setEditingTodo, loadTodos }) => {
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!newTodo.title && !editingTodo?.title) return;
-
-    try {
-      if (editingTodo) {
-        await updateTodo(editingTodo.id, editingTodo);
-        setEditingTodo(null);
-      } else {
-        await createTodo({ ...newTodo });
-        setNewTodo({ title: "", description: "", completed: false });
-      }
-      loadTodos();
-    } catch (error) {
-      console.error("Error saving todo:", error);
-    }
-  };
-
+const TodoForm = ({ newTodo, setNewTodo, editingTodo, setEditingTodo, handleCreateTodo, handleUpdateTodo }) => {
   return (
-    <form className="todo-form" onSubmit={handleSubmit}>
+    <form className="todo-form" onSubmit={editingTodo ? handleUpdateTodo : handleCreateTodo}>
       <input
         type="text"
         placeholder="Title"

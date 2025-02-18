@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { fetchTodos } from "./api";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
-import "./styles.css"; // Import CSS styles
+import "./styles/styles.css"; // Import CSS styles
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);

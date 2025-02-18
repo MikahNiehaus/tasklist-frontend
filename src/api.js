@@ -3,11 +3,13 @@ import axios from "axios";
 // Determine environment
 const isProduction = process.env.NODE_ENV === "production";
 const API_BASE_URL = isProduction
-  ? "https://tasklist-backend-production.up.railway.app"
+  ? "https://tasklist-backend-production.up.railway.app" //remove me
   : "http://127.0.0.1:3001";
 
 console.log(`🌍 Environment: ${isProduction ? "Production" : "Development"}`);
-console.log(`🔗 API Base URL: ${API_BASE_URL}`);
+console.log(`🔗 API Base URL: ${API_BASE_URL}`);// remove me
+console.log(`🔗 API Base URL: ${API_URL}`); //remove later
+
 
 // ✅ Test API Connection and Log
 const testApiConnection = async () => {

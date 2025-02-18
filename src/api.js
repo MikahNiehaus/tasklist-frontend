@@ -4,7 +4,7 @@ import axios from "axios";
 const isProduction = process.env.NODE_ENV === "production";
 const API_BASE_URL = isProduction
   ? "https://tasklist-backend-production.up.railway.app" // Production API
-  : "http://127.0.0.1:3000"; // Development API
+  : "http://127.0.0.1:3001"; // Development API
 
 // Log environment & API Base URL
 console.log(`🌍 Environment: ${isProduction ? "Production" : "Development"}`);

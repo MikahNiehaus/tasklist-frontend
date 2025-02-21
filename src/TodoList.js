@@ -15,6 +15,7 @@ const TodoList = () => {
     newTodo,
     editingTodo,
     filter,
+    handleCompleteTodo,
     setNewTodo,
     setEditingTodo,
     setFilter,
@@ -60,12 +61,13 @@ const TodoList = () => {
           })
           .map((todo) => (
             <TodoItem
-              key={todo.id}
-              todo={todo}
-              setEditingTodo={setEditingTodo}
-              handleToggleStatus={handleToggleStatus}
-              handleDeleteTodo={handleDeleteTodo}
-            />
+            key={todo.id}
+            todo={todo}
+            setEditingTodo={setEditingTodo}
+            handleCompleteTodo={handleCompleteTodo} // ✅ Pass handleCompleteTodo
+            handleDeleteTodo={handleDeleteTodo}
+          />
+          
           ))}
       </ul>
     </div>

@@ -32,8 +32,7 @@ const Room = () => {
     setFilter,
     handleCreateTodo,
     handleUpdateTodo,
-    handleToggleStatus, // ✅ FIXED: Ensure this is included
-    handleDeleteTodo,
+    handleDeleteTodo, // ✅ Removed handleToggleStatus
   } = useTodos(roomCode); // ✅ Fetch todos using the correct room code
 
   useEffect(() => {
@@ -65,13 +64,13 @@ const Room = () => {
       {/* Todo List */}
       <ul className="todo-list">
         {todos.map((todo) => (
-         <TodoItem
-         key={todo.id}
-         todo={todo}
-         setEditingTodo={setEditingTodo}
-         handleToggleStatus={handleToggleStatus} // ✅ Ensure it's passed
-         handleDeleteTodo={handleDeleteTodo}
-       />
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            setEditingTodo={setEditingTodo}
+            handleDeleteTodo={handleDeleteTodo} 
+            roomCode={roomCode} 
+          />
         ))}
       </ul>
     </div>

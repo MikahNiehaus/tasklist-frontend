@@ -98,22 +98,28 @@ export const updateTodo = async (roomCode, id, updatedTodo) => {
 
 
 
-// ✅ Mark a todo as completed inside a room
-export const completeTodo = async (roomCode, id) => {
-  const url = `${API_BASE_URL}/rooms/${roomCode}/todos/${id}/complete`;
-  const requestData = { todo: {} }; // ✅ Ensure request consistency
-
-  logRequest("PATCH", url, requestData);
-
+// ✅ Toggle todo inside a room
+export const toggleTodo = async (roomCode, id) => {
   try {
+    const url = `${API_BASE_URL}/rooms/${roomCode}/todos/${id}/toggle`;
+    const requestData = { todo: {} };
+
+    logRequest("PATCH", url, requestData);
+
     const response = await axios.patch(url, requestData);
     logResponse("PATCH", url, response);
-    return response.data;
+
+    console.log("✅ Todo Toggled Successfully:", response.data);
+    
+    return response.data; // ✅ Ensure updated data is returned
   } catch (error) {
-    console.error("❌ Error marking todo as complete:", error.response?.data || error.message);
+    console.error("❌ Error toggling todo status:", error.response?.data || error.message);
     throw error;
   }
 };
+
+
+
 
 
 // ✅ Delete a todo from a room

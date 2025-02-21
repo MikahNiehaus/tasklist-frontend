@@ -1,7 +1,25 @@
 import React from "react";
+import { toggleTodo } from "../api"; // ✅ Import toggleTodo API
 
-const TodoItem = ({ todo, setEditingTodo, handleToggleStatus, handleDeleteTodo }) => {
-  console.log(`📝 Rendering Todo ID: ${todo.id} | Title: ${todo.title}`);
+const TodoItem = ({ todo, setEditingTodo, handleDeleteTodo, roomCode, setTodos }) => {
+  // ✅ Toggle status using API and update UI immediately
+  const handleToggleTodo = async () => {
+    try {
+      await toggleTodo(roomCode, todo.id); // ✅ API call
+
+      // ✅ Optimistically update UI by toggling completed state
+      setTodos((prevTodos) =>
+        prevTodos.map((t) =>
+          t.id === todo.id ? { ...t, completed: !t.completed } : t
+        )
+      );
+
+      // Optional: If you need to refresh todos from the DB, uncomment this:
+      // await loadTodos();
+    } catch (error) {
+      console.error("❌ Error toggling todo status:", error);
+    }
+  };
 
   return (
     <li className={`todo-item ${todo.completed ? "completed" : ""}`}>
@@ -9,33 +27,19 @@ const TodoItem = ({ todo, setEditingTodo, handleToggleStatus, handleDeleteTodo }
       <p>{todo.description}</p>
       <p>Status: {todo.completed ? "✅ Completed" : "❌ Pending"}</p>
 
-      {/* ✅ Toggle Between Complete & Pending */}
-      <button
-        onClick={() => {
-          console.log(`🎯 Toggle Button Clicked for Todo ID: ${todo.id}`);
-          if (!handleToggleStatus) {
-            console.error("❌ ERROR: handleToggleStatus is NOT defined!");
-            return;
-          }
-          handleToggleStatus(todo);
-        }}
-        className="toggle-btn"
-      >
+      {/* ✅ Use handleToggleTodo to toggle status */}
+      <button onClick={handleToggleTodo} className="toggle-btn">
         {todo.completed ? "Reopen" : "Mark Complete"}
       </button>
 
-      {/* ✅ Edit Button */}
       <button onClick={() => setEditingTodo(todo)} className="edit-btn">
         ✏️ Edit
       </button>
-
-      {/* ✅ Delete Button */}
       <button onClick={() => handleDeleteTodo(todo.id)} className="delete-btn">
         ❌ Delete
       </button>
     </li>
   );
 };
-
 
 export default TodoItem;

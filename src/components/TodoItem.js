@@ -1,6 +1,8 @@
 import React from "react";
 
 const TodoItem = ({ todo, setEditingTodo, handleToggleStatus, handleDeleteTodo }) => {
+  console.log(`📝 Rendering Todo ID: ${todo.id} | Title: ${todo.title}`);
+
   return (
     <li className={`todo-item ${todo.completed ? "completed" : ""}`}>
       <h3>{todo.title}</h3>
@@ -8,7 +10,17 @@ const TodoItem = ({ todo, setEditingTodo, handleToggleStatus, handleDeleteTodo }
       <p>Status: {todo.completed ? "✅ Completed" : "❌ Pending"}</p>
 
       {/* ✅ Toggle Between Complete & Pending */}
-      <button onClick={() => handleToggleStatus(todo)} className="toggle-btn">
+      <button
+        onClick={() => {
+          console.log(`🎯 Toggle Button Clicked for Todo ID: ${todo.id}`);
+          if (!handleToggleStatus) {
+            console.error("❌ ERROR: handleToggleStatus is NOT defined!");
+            return;
+          }
+          handleToggleStatus(todo);
+        }}
+        className="toggle-btn"
+      >
         {todo.completed ? "Reopen" : "Mark Complete"}
       </button>
 
@@ -24,5 +36,6 @@ const TodoItem = ({ todo, setEditingTodo, handleToggleStatus, handleDeleteTodo }
     </li>
   );
 };
+
 
 export default TodoItem;

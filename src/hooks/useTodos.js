@@ -7,54 +7,85 @@ const useTodos = (roomCode) => {
   const [editingTodo, setEditingTodo] = useState(null);
   const [filter, setFilter] = useState("all");
 
+  console.log("🛠️ useTodos Hook Initialized");
+  console.log("📌 Room Code:", roomCode);
+
   // ✅ Fetch todos when the component mounts
   useEffect(() => {
     if (roomCode) {
-      fetchTodos(roomCode).then(setTodos);
+      console.log("📡 Fetching todos for room:", roomCode);
+      fetchTodos(roomCode)
+        .then((fetchedTodos) => {
+          console.log("✅ Todos fetched successfully:", fetchedTodos);
+          setTodos(fetchedTodos);
+        })
+        .catch((error) => console.error("❌ Error fetching todos:", error));
     }
   }, [roomCode]);
 
   // ✅ Create a new todo
   const handleCreateTodo = async () => {
-    if (!newTodo.title.trim()) return; // Prevent empty title submission
+    console.log("📝 handleCreateTodo called with:", newTodo);
+    
+    if (!newTodo.title.trim()) {
+      console.error("❌ Cannot create an empty todo!");
+      return;
+    }
 
     try {
+      console.log("🚀 Sending API request to create todo...");
       const createdTodo = await createTodo(roomCode, newTodo);
-      setTodos((prevTodos) => [...prevTodos, createdTodo]); // ✅ Append new todo
+      console.log("✅ Todo created successfully:", createdTodo);
+
+      setTodos((prevTodos) => {
+        const newTodos = [...prevTodos, createdTodo];
+        console.log("🆕 Updated Todos State:", newTodos);
+        return newTodos;
+      });
+
       setNewTodo({ title: "", description: "" }); // ✅ Reset input fields
     } catch (error) {
       console.error("❌ Error creating todo:", error);
     }
   };
 
-  // ✅ Toggle Between Complete & Pending
-  const handleToggleStatus = async (todo) => {
-    try {
-      const updatedTodo = await updateTodo(roomCode, todo.id, { 
-        title: todo.title, 
-        description: todo.description, 
-        completed: !todo.completed // ✅ Toggle true/false
-      });
+  // ✅ Toggle Between Complete & Pending (Calls API)
+ const handleToggleStatus = async (todo) => {
+  try {
+    const updatedTodo = await updateTodo(roomCode, todo.id, { 
+      title: todo.title, 
+      description: todo.description, 
+      completed: !todo.completed 
+    });
 
-      setTodos((prevTodos) =>
-        prevTodos.map((t) => (t.id === todo.id ? updatedTodo : t))
-      );
-    } catch (error) {
-      console.error("❌ Error toggling todo status:", error);
-    }
-  };
+    setTodos((prevTodos) =>
+      prevTodos.map((t) => (t.id === todo.id ? updatedTodo : t))
+    );
+  } catch (error) {
+    console.error("❌ Error toggling todo status:", error);
+  }
+};
 
-  // ✅ Handle Editing a Todo
+  
+
+  // ✅ Update a todo
   const handleUpdateTodo = async (id, updatedTitle, updatedDescription) => {
+    console.log("✏️ handleUpdateTodo called for ID:", id);
+    
     try {
+      console.log("🚀 Sending API request to update todo...");
       const updatedTodo = await updateTodo(roomCode, id, { 
         title: updatedTitle, 
         description: updatedDescription 
       });
 
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo))
-      );
+      console.log("✅ API Response for Update:", updatedTodo);
+
+      setTodos((prevTodos) => {
+        const newTodos = prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo));
+        console.log("🆕 Updated Todos State:", newTodos);
+        return newTodos;
+      });
 
       setEditingTodo(null); // ✅ Exit editing mode
     } catch (error) {
@@ -64,23 +95,44 @@ const useTodos = (roomCode) => {
 
   // ✅ Delete a task
   const handleDeleteTodo = async (id) => {
-    await deleteTodo(roomCode, id);
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+    console.log("🗑️ handleDeleteTodo called for ID:", id);
+
+    try {
+      console.log("🚀 Sending API request to delete todo...");
+      await deleteTodo(roomCode, id);
+      console.log("✅ Todo deleted successfully!");
+
+      setTodos((prevTodos) => {
+        const newTodos = prevTodos.filter((todo) => todo.id !== id);
+        console.log("🆕 Updated Todos State:", newTodos);
+        return newTodos;
+      });
+    } catch (error) {
+      console.error("❌ Error deleting todo:", error);
+    }
   };
+  
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "all") return true;
+    if (filter === "pending") return !todo.completed;
+    if (filter === "completed") return todo.completed;
+    return true;
+  });
+  
 
   return {
-    todos,
+    todos: filteredTodos,  // ✅ Now returning the filtered list
     newTodo,
     editingTodo,
     filter,
     setNewTodo,
     setEditingTodo,
     setFilter,
-    handleCreateTodo, // ✅ Restored!
+    handleCreateTodo,
     handleToggleStatus,
     handleUpdateTodo,
     handleDeleteTodo,
   };
-};
+};  
 
 export default useTodos;

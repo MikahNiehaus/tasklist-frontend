@@ -10,6 +10,10 @@ const Room = () => {
   const { roomCode } = useParams(); // ✅ Get room code from URL
   const navigate = useNavigate();
 
+  console.log("\n==============================");
+  console.log(`📌 [Room Component] Rendered for Room Code: ${roomCode}`);
+  console.log("==============================\n");
+
   // ✅ Prevent API calls if roomCode is missing
   useEffect(() => {
     if (!roomCode) {
@@ -28,9 +32,17 @@ const Room = () => {
     setFilter,
     handleCreateTodo,
     handleUpdateTodo,
-    handleCompleteTodo,
+    handleToggleStatus, // ✅ FIXED: Ensure this is included
     handleDeleteTodo,
   } = useTodos(roomCode); // ✅ Fetch todos using the correct room code
+
+  useEffect(() => {
+    console.log(`🔄 [Filter Updated] => ${filter}`);
+  }, [filter]);
+
+  useEffect(() => {
+    console.log(`📋 [Todos Updated] =>`, todos);
+  }, [todos]);
 
   return (
     <div className="container">
@@ -53,13 +65,13 @@ const Room = () => {
       {/* Todo List */}
       <ul className="todo-list">
         {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            setEditingTodo={setEditingTodo}
-            handleCompleteTodo={handleCompleteTodo}
-            handleDeleteTodo={handleDeleteTodo}
-          />
+         <TodoItem
+         key={todo.id}
+         todo={todo}
+         setEditingTodo={setEditingTodo}
+         handleToggleStatus={handleToggleStatus} // ✅ Ensure it's passed
+         handleDeleteTodo={handleDeleteTodo}
+       />
         ))}
       </ul>
     </div>

@@ -1,82 +1,58 @@
-import { useState, useEffect, useCallback } from "react";
-import { fetchTodos, createTodo, updateTodo, completeTodo, deleteTodo } from "../api";
+import { useState, useEffect } from "react";
+import { fetchTodos, createTodo, updateTodo, completeTodo, deleteTodo } from "../api"; // ✅ Fixed Imports
 
-const useTodos = () => {
+const useTodos = (roomCode) => {
   const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState({ title: "", description: "", completed: false });
+  const [newTodo, setNewTodo] = useState("");
   const [editingTodo, setEditingTodo] = useState(null);
   const [filter, setFilter] = useState("all");
 
-  // ✅ Load Todos
-  const loadTodos = useCallback(async () => {
-    try {
-      const data = await fetchTodos(filter);
-      setTodos(data);
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    }
-  }, [filter]);
-
+  // ✅ Fetch todos when the component mounts
   useEffect(() => {
-    loadTodos();
-  }, [loadTodos]);
+    if (roomCode) {
+      fetchTodos(roomCode).then(setTodos);
+    }
+  }, [roomCode]);
 
-  // ✅ Create a Todo
   const handleCreateTodo = async (e) => {
-    e.preventDefault();
-    if (!newTodo.title) return;
-
+    if (e && e.preventDefault) e.preventDefault(); // ✅ Ensure it's an event before calling preventDefault()
+  
+    if (!newTodo || !newTodo.title?.trim()) {
+      console.error("⚠️ Cannot create an empty todo!");
+      return;
+    }
+  
     try {
-      await createTodo({ ...newTodo });
-      setNewTodo({ title: "", description: "", completed: false });
-      loadTodos();
+      const createdTodo = await createTodo(roomCode, { title: newTodo.title, description: newTodo.description || "" });
+      setTodos((prevTodos) => [...prevTodos, createdTodo]); // ✅ Update UI instantly
+      setNewTodo({ title: "", description: "" }); // ✅ Clear input after adding
     } catch (error) {
-      console.error("Error creating todo:", error);
+      console.error("❌ Error creating todo:", error.message);
     }
   };
+  
+  
 
-  // ✅ Update a Todo
-  const handleUpdateTodo = async (e) => {
-    e.preventDefault();
-    if (!editingTodo.title) return;
-
-    try {
-      await updateTodo(editingTodo.id, editingTodo);
-      setEditingTodo(null);
-      loadTodos();
-    } catch (error) {
-      console.error("Error updating todo:", error);
-    }
+  // ✅ Update an existing todo
+  const handleUpdateTodo = async (id, updatedText) => {
+    const updatedTodo = await updateTodo(roomCode, id, { title: updatedText });
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo))
+    );
   };
 
-  // ✅ Complete a Todo
+  // ✅ Mark a task as completed
   const handleCompleteTodo = async (id) => {
-    try {
-      await completeTodo(id);
-      loadTodos();
-    } catch (error) {
-      console.error("Error marking todo as completed:", error);
-    }
+    const updatedTodo = await completeTodo(roomCode, id);
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => (todo.id === id ? updatedTodo : todo))
+    );
   };
 
-  // ✅ Toggle Status
-  const handleToggleStatus = async (todo) => {
-    try {
-      await updateTodo(todo.id, { ...todo, completed: !todo.completed });
-      loadTodos();
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
-  };
-
-  // ✅ Delete a Todo
+  // ✅ Delete a task
   const handleDeleteTodo = async (id) => {
-    try {
-      await deleteTodo(id);
-      loadTodos();
-    } catch (error) {
-      console.error("Error deleting todo:", error);
-    }
+    await deleteTodo(roomCode, id);
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   return {
@@ -90,7 +66,6 @@ const useTodos = () => {
     handleCreateTodo,
     handleUpdateTodo,
     handleCompleteTodo,
-    handleToggleStatus,
     handleDeleteTodo,
   };
 };

@@ -1,12 +1,27 @@
 import React from "react";
 
 const TodoForm = ({ newTodo, setNewTodo, editingTodo, setEditingTodo, handleCreateTodo, handleUpdateTodo }) => {
+  
+  const handleSubmit = (e) => {
+    e.preventDefault(); // ✅ Prevents page refresh
+
+    if (editingTodo) {
+      handleUpdateTodo(editingTodo.id, editingTodo);
+      setEditingTodo(null); // ✅ Reset the form after updating
+    } else {
+      handleCreateTodo(newTodo);
+    }
+
+    // ✅ Reset form after submission
+    setNewTodo({ title: "", description: "" });
+  };
+
   return (
-    <form className="todo-form" onSubmit={editingTodo ? handleUpdateTodo : handleCreateTodo}>
+    <form className="todo-form" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Title"
-        value={editingTodo ? editingTodo.title : newTodo.title}
+        value={editingTodo ? editingTodo.title : newTodo?.title || ""}
         onChange={(e) =>
           editingTodo
             ? setEditingTodo({ ...editingTodo, title: e.target.value })
@@ -17,7 +32,7 @@ const TodoForm = ({ newTodo, setNewTodo, editingTodo, setEditingTodo, handleCrea
       <input
         type="text"
         placeholder="Description"
-        value={editingTodo ? editingTodo.description : newTodo.description}
+        value={editingTodo ? editingTodo.description : newTodo?.description || ""}
         onChange={(e) =>
           editingTodo
             ? setEditingTodo({ ...editingTodo, description: e.target.value })
@@ -26,7 +41,11 @@ const TodoForm = ({ newTodo, setNewTodo, editingTodo, setEditingTodo, handleCrea
       />
       <button type="submit">{editingTodo ? "Update Todo" : "Create Todo"}</button>
       {editingTodo && (
-        <button className="cancel-btn" onClick={() => setEditingTodo(null)}>
+        <button
+          type="button"
+          className="cancel-btn"
+          onClick={() => setEditingTodo(null)} // ✅ Reset after canceling
+        >
           Cancel
         </button>
       )}

@@ -32,7 +32,8 @@ const Room = () => {
     setFilter,
     handleCreateTodo,
     handleUpdateTodo,
-    handleDeleteTodo, // ✅ Removed handleToggleStatus
+    handleToggleStatus, // ✅ Toggle function added
+    handleDeleteTodo,
   } = useTodos(roomCode); // ✅ Fetch todos using the correct room code
 
   useEffect(() => {
@@ -46,7 +47,12 @@ const Room = () => {
   return (
     <div className="container">
       <h1>Room: {roomCode}</h1>
-      <p>🔗 Share this link: {window.location.href}</p>
+<p>
+  🔗 Share this link:{" "}
+  <button onClick={() => navigator.clipboard.writeText(window.location.href)}>
+    {window.location.href}
+  </button>
+</p>
 
       {/* Todo Filter */}
       <TodoFilter filter={filter} setFilter={setFilter} />
@@ -68,6 +74,7 @@ const Room = () => {
             key={todo.id}
             todo={todo}
             setEditingTodo={setEditingTodo}
+            handleToggleStatus={handleToggleStatus} // ✅ Toggle function added here
             handleDeleteTodo={handleDeleteTodo} 
             roomCode={roomCode} 
           />

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { fetchTodos, createTodo, updateTodo, deleteTodo } from "../api";
+import { fetchTodos, createTodo, updateTodo, deleteTodo, toggleTodo } from "../api"; // ✅ Import toggleTodo
 
 const useTodos = (roomCode) => {
   const [todos, setTodos] = useState([]);
@@ -54,6 +54,21 @@ const useTodos = (roomCode) => {
     }
   };
 
+  // ✅ Toggle a todo (New function added)
+  const handleToggleStatus = async (id) => {
+    try {
+      console.log("🔄 Toggling todo status...");
+      await toggleTodo(roomCode, id);
+      setTodos((prevTodos) =>
+        prevTodos.map((todo) =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        )
+      );
+    } catch (error) {
+      console.error("❌ Error toggling todo:", error);
+    }
+  };
+
   // ✅ Delete a task
   const handleDeleteTodo = async (id) => {
     try {
@@ -65,14 +80,17 @@ const useTodos = (roomCode) => {
     }
   };
 
-  // ✅ Apply Filtering
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === "all") return true;
-    return false; // No completed or pending filtering anymore
-  });
+ // ✅ Apply Filtering
+const filteredTodos = todos.filter((todo) => {
+  if (filter === "all") return true;
+  if (filter === "pending") return !todo.completed;
+  if (filter === "completed") return todo.completed;
+  return true;
+});
+
 
   return {
-    todos: filteredTodos,  // ✅ Return filtered list
+    todos: filteredTodos, // ✅ Return filtered list
     newTodo,
     editingTodo,
     filter,
@@ -81,6 +99,7 @@ const useTodos = (roomCode) => {
     setFilter,
     handleCreateTodo,
     handleUpdateTodo,
+    handleToggleStatus, // ✅ Toggle function added
     handleDeleteTodo,
   };
 };

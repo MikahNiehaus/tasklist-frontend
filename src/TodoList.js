@@ -20,7 +20,7 @@ const TodoList = () => {
     setEditingTodo,
     setFilter,
     handleCreateTodo,
-    handleToggleStatus,
+    handleToggleStatus, // ✅ Toggle function added
     handleUpdateTodo,
     handleDeleteTodo,
   } = useTodos();
@@ -61,13 +61,13 @@ const TodoList = () => {
           })
           .map((todo) => (
             <TodoItem
-            key={todo.id}
-            todo={todo}
-            setEditingTodo={setEditingTodo}
-            handleCompleteTodo={handleCompleteTodo} // ✅ Pass handleCompleteTodo
-            handleDeleteTodo={handleDeleteTodo}
-          />
-          
+              key={todo.id}
+              todo={todo}
+              setEditingTodo={setEditingTodo}
+              handleToggleStatus={handleToggleStatus} // ✅ Toggle function added here
+              handleCompleteTodo={handleCompleteTodo} 
+              handleDeleteTodo={handleDeleteTodo}
+            />
           ))}
       </ul>
     </div>

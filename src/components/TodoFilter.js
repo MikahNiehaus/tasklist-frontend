@@ -5,6 +5,8 @@ const TodoFilter = ({ filter, setFilter }) => {
   console.log("🔍 [Current Filter] =>", filter);
 
   const handleFilterChange = (type) => {
+    if (filter === type) return; // ✅ Prevent unnecessary re-renders if the same filter is clicked
+
     console.log(`\n==============================`);
     console.log(`🎯 [Filter Button Clicked] => ${type} at`, new Date().toLocaleTimeString());
     console.log(`🔄 [Previous Filter] => ${filter}`);

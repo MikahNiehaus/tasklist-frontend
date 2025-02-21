@@ -82,11 +82,6 @@ export const createTodo = async (roomCode, todo) => {
 
 // ✅ Update a todo inside a specific room
 export const updateTodo = async (roomCode, id, updatedTodo) => {
-  if (!updatedTodo || !updatedTodo.title) {
-    console.error("❌ Error: Missing updated todo data!");
-    return;
-  }
-
   const url = `${API_BASE_URL}/rooms/${roomCode}/todos/${id}`;
   const requestData = { todo: updatedTodo }; // ✅ Wrap inside "todo"
   logRequest("PATCH", url, requestData);
@@ -100,6 +95,8 @@ export const updateTodo = async (roomCode, id, updatedTodo) => {
     throw error;
   }
 };
+
+
 
 // ✅ Mark a todo as completed inside a room
 export const completeTodo = async (roomCode, id) => {

@@ -16,7 +16,6 @@ const TodoList = () => {
     setFilter,
     handleCreateTodo,
     handleUpdateTodo,
-    handleCompleteTodo,
     handleToggleStatus,
     handleDeleteTodo,
   } = useTodos();
@@ -45,8 +44,7 @@ const TodoList = () => {
             key={todo.id}
             todo={todo}
             setEditingTodo={setEditingTodo}
-            handleCompleteTodo={handleCompleteTodo}
-            handleToggleStatus={handleToggleStatus}
+            handleToggleStatus={handleToggleStatus} // ✅ Now correctly passed
             handleDeleteTodo={handleDeleteTodo}
           />
         ))}

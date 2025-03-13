@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createRoom, checkRoomExists } from "../api"; // ✅ Fixed Imports
+import { createRoom, checkRoomExists } from "../api";
 import "../styles.css";
 
 const Home = () => {
@@ -8,22 +8,22 @@ const Home = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // ✅ Create a New Room (Backend Generates Room Code)
+  // Create a new room and navigate to it
   const handleCreateRoom = async () => {
     try {
       const newRoomCode = await createRoom();
       navigate(`/room/${newRoomCode}`);
     } catch (error) {
-      setError("❌ Failed to create room. Try again.");
+      setError("Failed to create room. Try again.");
     }
   };
 
-  // ✅ Join an Existing Room
+  // Join an existing room if it exists
   const handleJoinRoom = async () => {
     setError("");
 
     if (!roomCode) {
-      setError("⚠️ Please enter a room code.");
+      setError("Please enter a room code.");
       return;
     }
 
@@ -31,7 +31,7 @@ const Home = () => {
     if (exists) {
       navigate(`/room/${roomCode}`);
     } else {
-      setError("❌ Room not found! Please check the code.");
+      setError("Room not found! Please check the code.");
     }
   };
 
@@ -46,12 +46,12 @@ const Home = () => {
           type="text"
           placeholder="Enter Room Code"
           value={roomCode}
-          onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+          onChange={(e) => setRoomCode(e.target.value.toUpperCase())} // Convert input to uppercase
         />
         <button className="btn" onClick={handleJoinRoom}>Join Room</button>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error">{error}</p>} {/* Display error message if any */}
     </div>
   );
 };

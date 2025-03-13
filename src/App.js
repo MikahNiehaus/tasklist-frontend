@@ -11,15 +11,15 @@ function App() {
     <Router>
       <nav className="navbar">
         <ul>
-          <li><Link to="/">🏠 Home</Link></li>
-          <li><Link to="/about">ℹ️ About</Link></li>
+          <li><Link to="/">Home</Link></li> {/* Link to Home page */}
+          <li><Link to="/about">About</Link></li> {/* Link to About page */}
         </ul>
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/room/:roomCode" element={<Room />} />
+        <Route path="/" element={<Home />} /> {/* Route for Home page */}
+        <Route path="/about" element={<About />} /> {/* Route for About page */}
+        <Route path="/room/:roomCode" element={<Room />} /> {/* Route for Room page with dynamic roomCode */}
       </Routes>
     </Router>
   );

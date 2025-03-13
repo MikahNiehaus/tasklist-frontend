@@ -7,17 +7,17 @@ import TodoFilter from "../components/TodoFilter";
 import "../styles.css";
 
 const Room = () => {
-  const { roomCode } = useParams(); // ✅ Get room code from URL
+  const { roomCode } = useParams(); // Get room code from URL parameters
   const navigate = useNavigate();
 
   console.log("\n==============================");
-  console.log(`📌 [Room Component] Rendered for Room Code: ${roomCode}`);
+  console.log(`Room Component Rendered for Room Code: ${roomCode}`);
   console.log("==============================\n");
 
-  // ✅ Prevent API calls if roomCode is missing
+  // Redirect to home if roomCode is missing
   useEffect(() => {
     if (!roomCode) {
-      console.error("❌ Error: Room code is undefined!");
+      console.error("Error: Room code is undefined!");
       navigate("/");
     }
   }, [roomCode, navigate]);
@@ -32,27 +32,27 @@ const Room = () => {
     setFilter,
     handleCreateTodo,
     handleUpdateTodo,
-    handleToggleStatus, // ✅ Toggle function added
+    handleToggleStatus,
     handleDeleteTodo,
-  } = useTodos(roomCode); // ✅ Fetch todos using the correct room code
+  } = useTodos(roomCode); // Fetch todos using the room code
 
   useEffect(() => {
-    console.log(`🔄 [Filter Updated] => ${filter}`);
+    console.log(`Filter Updated => ${filter}`);
   }, [filter]);
 
   useEffect(() => {
-    console.log(`📋 [Todos Updated] =>`, todos);
+    console.log(`Todos Updated =>`, todos);
   }, [todos]);
 
   return (
     <div className="container">
       <h1>Room: {roomCode}</h1>
-<p>
-  🔗 Share this link:{" "}
-  <button onClick={() => navigator.clipboard.writeText(window.location.href)}>
-    {window.location.href}
-  </button>
-</p>
+      <p>
+        Share this link:{" "}
+        <button onClick={() => navigator.clipboard.writeText(window.location.href)}>
+          {window.location.href}
+        </button>
+      </p>
 
       {/* Todo Filter */}
       <TodoFilter filter={filter} setFilter={setFilter} />
@@ -74,7 +74,7 @@ const Room = () => {
             key={todo.id}
             todo={todo}
             setEditingTodo={setEditingTodo}
-            handleToggleStatus={handleToggleStatus} // ✅ Toggle function added here
+            handleToggleStatus={handleToggleStatus}
             handleDeleteTodo={handleDeleteTodo} 
             roomCode={roomCode} 
           />

@@ -25,6 +25,7 @@ const TodoForm = ({ newTodo, setNewTodo, editingTodo, setEditingTodo, handleCrea
 
   return (
     <form className="todo-form" onSubmit={handleSubmit}>
+
       <input
         type="text"
         placeholder="Title"

@@ -33,6 +33,7 @@ const TodoList = () => {
     console.log(`📋 [Todos Updated] =>`, todos);
   }, [todos]);
 
+
   return (
     <div className="container">
       <h1 className="title">To-Do List</h1>
@@ -60,6 +61,7 @@ const TodoList = () => {
             return true;
           })
           .map((todo) => (
+
             <TodoItem
               key={todo.id}
               todo={todo}

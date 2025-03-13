@@ -58,6 +58,7 @@ export const fetchTodos = async (roomCode) => {
   try {
     const response = await axios.get(url);
     logResponse("GET", url, response);
+    console.log("📥 Full Response Data:", response.data); // ✅ Log full response data
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching todos:", error.response?.data || error.message);
@@ -79,6 +80,7 @@ export const createTodo = async (roomCode, todo) => {
   try {
     const response = await axios.post(url, requestData);
     logResponse("POST", url, response);
+    console.log("📥 Full Todo Array:", response.data); // ✅ Log full todo array
     return response.data;
   } catch (error) {
     console.error("❌ Error creating todo:", error.response?.data || error.message);
@@ -95,6 +97,7 @@ export const updateTodo = async (roomCode, id, updatedTodo) => {
   try {
     const response = await axios.patch(url, requestData);
     logResponse("PATCH", url, response);
+    console.log("📥 Full Todo Array:", response.data); // ✅ Log full todo array
     return response.data;
   } catch (error) {
     console.error("❌ Error updating todo:", error.response?.data || error.message);

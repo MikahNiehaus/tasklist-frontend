@@ -1,12 +1,8 @@
 import axios from "axios";
 
-// Determine if the environment is development
-const isDev = true; // Corrected typo from "ture" to "true"
-
 // Set the API base URL based on the environment
-const API_BASE_URL = isDev 
-  ? "http://localhost:5000" 
-  : "https://tasklist-backend-production.up.railway.app";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+console.log("🚀 Using Development API:", API_BASE_URL);
 
 // ✅ Debugging: Log every request URL before sending it
 const logRequest = (method, url, data) => {

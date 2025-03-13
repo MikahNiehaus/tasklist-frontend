@@ -1,7 +1,12 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://tasklist-backend-production.up.railway.app" //remove this
-            
+// Determine if the environment is development
+const isDev = true; // Corrected typo from "ture" to "true"
+
+// Set the API base URL based on the environment
+const API_BASE_URL = isDev 
+  ? "http://localhost:5000" 
+  : "https://tasklist-backend-production.up.railway.app";
 
 // ✅ Debugging: Log every request URL before sending it
 const logRequest = (method, url, data) => {
@@ -97,8 +102,6 @@ export const updateTodo = async (roomCode, id, updatedTodo) => {
   }
 };
 
-
-
 // ✅ Toggle todo inside a room
 export const toggleTodo = async (roomCode, id) => {
   try {
@@ -118,10 +121,6 @@ export const toggleTodo = async (roomCode, id) => {
     throw error;
   }
 };
-
-
-
-
 
 // ✅ Delete a todo from a room
 export const deleteTodo = async (roomCode, id) => {
